@@ -17,10 +17,22 @@ fun main() {
 
 sealed interface Step {
     val amount: Int
+    fun moveFrom(startingPosition: Position) : Position
 
-    data class Forward(override val amount: Int) : Step
-    data class Up(override val amount: Int) : Step
-    data class Down(override val amount: Int) : Step
+    data class Forward(override val amount: Int) : Step {
+        override fun moveFrom(startingPosition: Position) =
+            startingPosition.copy(horizontal = startingPosition.horizontal + amount)
+
+    }
+    data class Up(override val amount: Int) : Step {
+        override fun moveFrom(startingPosition: Position) =
+            startingPosition.copy(depth = startingPosition.depth - amount)
+    }
+
+    data class Down(override val amount: Int) : Step {
+        override fun moveFrom(startingPosition: Position) =
+            startingPosition.copy(depth = startingPosition.depth + amount)
+    }
 }
 
 data class Position(
@@ -45,10 +57,6 @@ fun getFinalPosition(
     initialPosition: Position,
     steps: List<Step>
 ): Position =
-    steps.fold(initial = initialPosition) { acc, step ->
-        when (step) {
-            is Down -> Position(acc.horizontal, acc.depth + step.amount)
-            is Forward -> Position(acc.horizontal + step.amount, acc.depth)
-            is Up -> Position(acc.horizontal, acc.depth - step.amount)
-        }
+    steps.fold(initial = initialPosition) { previousPosition, step ->
+        step.moveFrom(previousPosition)
     }
