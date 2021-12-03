@@ -4,7 +4,7 @@ import gg.jte.aoc.v2021.countIncreasingStepsWithSlidingWindow
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day01Test {
+internal class Day01Test {
 
     @Test
     fun `should count the number of increasing steps`() {
