@@ -1,16 +1,16 @@
 package v2021
 
-import gg.jte.aoc.v2021.countDecreaseSteps
-import gg.jte.aoc.v2021.countDecreaseStepsWithSlidingWindow
+import gg.jte.aoc.v2021.countIncreasingStepsWithSlidingWindow
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 class Day01Test {
 
     @Test
-    fun `should count the number of decreasing steps`() {
-        countDecreaseSteps(
-            listOf(
+    fun `should count the number of increasing steps`() {
+        countIncreasingStepsWithSlidingWindow(
+            windowSize = 1,
+            measures = listOf(
                 199,
                 200,
                 208,
@@ -26,9 +26,10 @@ class Day01Test {
     }
 
     @Test
-    fun `should count the number of decreasing steps with sliding window`() {
-        countDecreaseStepsWithSlidingWindow(
-            listOf(
+    fun `should count the number of increasing steps with sliding window`() {
+        countIncreasingStepsWithSlidingWindow(
+            windowSize = 3,
+            measures = listOf(
                 199,
                 200,
                 208,

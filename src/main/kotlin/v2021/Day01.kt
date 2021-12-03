@@ -6,22 +6,19 @@ import gg.jte.aoc.getLinesFromFileAsInts
 fun main() {
     val input = getLinesFromFileAsInts("v2021/day_01.txt")
 
-    println(countDecreaseSteps(input))
-    println(countDecreaseStepsWithSlidingWindow(input))
+    println(countIncreasingStepsWithSlidingWindow(windowSize = 1, measures = input))
+    println(countIncreasingStepsWithSlidingWindow(windowSize = 3, measures = input))
 
 }
 
-fun countDecreaseSteps(measures: List<Int>): Int =
+fun countIncreasingStepsWithSlidingWindow(
+    windowSize: Int,
+    measures: List<Int>
+): Int =
     measures
+        .windowed(windowSize) { it.sum() }
         .zipWithNext()
-        .count { it.decreases() }
-
-fun countDecreaseStepsWithSlidingWindow(measures: List<Int>): Int =
-    measures
-        .windowed(3)
-        .map { it.sum() }
-        .zipWithNext()
-        .count { it.decreases() }
+        .count { it.increases() }
 
 
-fun Pair<Int, Int>.decreases() = second > first
+fun Pair<Int, Int>.increases() = second > first
