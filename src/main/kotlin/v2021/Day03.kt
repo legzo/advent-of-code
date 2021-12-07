@@ -7,30 +7,63 @@ typealias BitFrequency = Pair<Char, Int>
 fun main() {
     val input = getLinesFromFile("v2021/day_03.txt")
     println(calculateEpsilonRate(input) * calculateGammaRate(input))
+    println(calculateOxygenGeneratorRating(input) * calculateCO2ScrubberRating(input))
 }
 
+fun calculateOxygenGeneratorRating(diagnosticReport: List<String>) =
+    diagnosticReport.filterBy(::keepMostFrequent).convertToDecimalInt()
+
+fun calculateCO2ScrubberRating(diagnosticReport: List<String>) =
+    diagnosticReport.filterBy(::keepLeastFrequent).convertToDecimalInt()
+
 fun calculateGammaRate(diagnosticReport: List<String>): Int =
-    diagnosticReport.forEachBit(::keepMostFrequent).convertToInt()
+    diagnosticReport.forEachBit(apply = ::keepMostFrequent).convertToDecimalInt()
 
 fun calculateEpsilonRate(diagnosticReport: List<String>): Int =
-    diagnosticReport.forEachBit(::keepLessFrequent).convertToInt()
+    diagnosticReport.forEachBit(apply = ::keepLeastFrequent).convertToDecimalInt()
 
-fun List<String>.forEachBit(
-    funToApply: (Iterable<BitFrequency>) -> BitFrequency?
+private fun List<String>.filterBy(
+    apply: (Iterable<BitFrequency>) -> String
 ): String =
     (0 until first().length)
-        .joinToString(separator = "") { bitIndex ->
-            funToApply(getBitsFrequencies(this, bitIndex))
-                ?.first.toString()
+        .fold(this) { remainingList, index ->
+            val bitToKeep = remainingList.forEachBit(atIndex = index, apply)
+            remainingList.filter { it[index].toString() == bitToKeep }
         }
+        .joinToString(separator = "") { it }
 
-private fun String.convertToInt() = toInt(2)
+private fun List<String>.forEachBit(
+    atIndex: Int? = null,
+    apply: (Iterable<BitFrequency>) -> String
+): String {
+    val range = if (atIndex != null) (atIndex until atIndex + 1)
+    else (0 until first().length)
 
-private fun keepMostFrequent(bitsFrequencies: Iterable<BitFrequency>) =
-    bitsFrequencies.maxByOrNull { (_, numberOfOccurrences) -> numberOfOccurrences }
+    return range
+        .joinToString(separator = "") { bitIndex ->
+            apply(getBitsFrequencies(this, bitIndex))
+        }
+}
 
-private fun keepLessFrequent(bitsFrequencies: Iterable<BitFrequency>) =
-    bitsFrequencies.minByOrNull { (_, numberOfOccurrences) -> numberOfOccurrences }
+private fun String.convertToDecimalInt() = toInt(2)
+
+private fun keepMostFrequent(bitsFrequencies: Iterable<BitFrequency>): String {
+    val topFrequencies = bitsFrequencies
+        .groupBy { (_, numberOfOccurrences) -> numberOfOccurrences }
+        .maxByOrNull { (numberOfOccurrences, _) -> numberOfOccurrences }
+
+    return if (topFrequencies?.value?.size == 1) topFrequencies.value.first().first.toString()
+    else "1"
+}
+
+private fun keepLeastFrequent(bitsFrequencies: Iterable<BitFrequency>): String {
+    val lowestFrequencies = bitsFrequencies
+        .groupBy { (_, numberOfOccurrences) -> numberOfOccurrences }
+        .minByOrNull { (numberOfOccurrences, _) -> numberOfOccurrences }
+
+    return if (lowestFrequencies?.value?.size == 1) lowestFrequencies.value.first().first.toString()
+    else "0"
+}
 
 private fun getBitsFrequencies(
     diagnosticReport: List<String>,
