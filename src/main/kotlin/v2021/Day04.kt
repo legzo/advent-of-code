@@ -1,6 +1,7 @@
 package gg.jte.aoc.v2021
 
 import gg.jte.aoc.getLinesFromFile
+import java.lang.IllegalStateException
 import kotlin.math.sqrt
 
 fun main() {
@@ -13,25 +14,32 @@ fun main() {
         .windowed(size = 5, step = 6) //equivalent à .chunked(6) { it.dropLast(1) }
         .map { Board.from(it) }
 
-    println(calculateWinningScore(boards, drawNumbers))
+    println(findFirstWinningBoard(boards, drawNumbers).score)
 }
 
-fun calculateWinningScore(
+fun findFirstWinningBoard(
     boards: List<Board>,
     drawNumbers: List<Int>
-): Int? {
+): BoardAndLastDrawNumber {
     drawNumbers
         .fold(boards) { oldBoards, drawNumber ->
             val newBoards = oldBoards.mark(drawNumber)
 
             newBoards
                 .firstOrNull { it.wins() }
-                ?.let { return drawNumber * it.sumOfUnmarkedNumbers() }
+                ?.let { return BoardAndLastDrawNumber(it, drawNumber) }
 
             newBoards
         }
 
-    return null
+    throw IllegalStateException("No winnning board found")
+}
+
+data class BoardAndLastDrawNumber(
+    val board: Board,
+    val lastDrawNumber: Int
+) {
+    val score = board.sumOfUnmarkedNumbers() * lastDrawNumber
 }
 
 data class Cell(
