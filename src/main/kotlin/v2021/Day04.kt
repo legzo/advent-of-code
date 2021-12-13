@@ -15,6 +15,7 @@ fun main() {
         .map { Board.from(it) }
 
     println(findFirstWinningBoard(boards, drawNumbers).score)
+    println(findLastWinningBoard(boards, drawNumbers).score)
 }
 
 fun findFirstWinningBoard(
@@ -32,7 +33,26 @@ fun findFirstWinningBoard(
             newBoards
         }
 
-    throw IllegalStateException("No winnning board found")
+    throw IllegalStateException("No board found")
+}
+
+fun findLastWinningBoard(
+    boards: List<Board>,
+    drawNumbers: List<Int>
+): BoardAndLastDrawNumber {
+    drawNumbers
+        .fold(boards) { oldBoards, drawNumber ->
+            val newBoards = oldBoards.mark(drawNumber)
+
+            val nonWinningBoards =  newBoards.filter { !it.wins() }
+            if (nonWinningBoards.isEmpty()) {
+                return BoardAndLastDrawNumber(newBoards.first(), drawNumber)
+            }
+
+            nonWinningBoards
+        }
+
+    throw IllegalStateException("No board found")
 }
 
 data class BoardAndLastDrawNumber(
