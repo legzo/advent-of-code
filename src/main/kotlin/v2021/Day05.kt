@@ -13,29 +13,18 @@ fun main() {
 }
 
 fun Iterable<Line>.findNumberOfPointsWhereAtLeast2LinesOverlap(): Int {
-    val extrema = getExtremaPoint(this)
 
     val horizontalAndVerticalLines = this
         .filter { (start, end) ->
             start.x == end.x || start.y == end.y
         }
 
-    return (0..extrema.x).sumOf { x ->
-        (0..extrema.y).count { y ->
-            println("$x $y")
-            val overlappingLines = horizontalAndVerticalLines
-                .filter { it.covers(Point(x, y)) }
-
-            overlappingLines.toList().size >= 2
-        }
-    }
+    return horizontalAndVerticalLines
+        .flatMap { it.points }
+        .groupingBy { it }
+        .eachCount()
+        .count { (_, occurrences) -> occurrences >= 2 }
 }
-
-fun getExtremaPoint(lines: Iterable<Line>): Point =
-    Point(
-        x = lines.maxOf { max(it.start.x, it.end.x) },
-        y = lines.maxOf { max(it.start.y, it.end.y) }
-    )
 
 fun Iterable<String>.parseAsLines() =
     mapNotNull {
@@ -56,7 +45,15 @@ data class Line(
     val start: Point,
     val end: Point
 ) {
-    fun covers(point: Point): Boolean =
-        point.x in setOf(start.x, end.x) && point.y in (min(start.y, end.y)..max(start.y, end.y))
-                || point.y in setOf(start.y, end.y) && point.x in (min(start.x, end.x)..max(start.x, end.x))
+
+    private val minX = min(start.x, end.x)
+    private val maxX = max(start.x, end.x)
+    private val minY = min(start.y, end.y)
+    private val maxY = max(start.y, end.y)
+
+    val points: Collection<Point> = when {
+        start.x == end.x -> (minY..maxY).map { Point(start.x, it) }
+        start.y == end.y ->  (minX..maxX).map { Point(it, start.y) }
+        else -> setOf()
+    }
 }

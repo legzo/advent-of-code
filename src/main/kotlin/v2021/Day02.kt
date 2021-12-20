@@ -77,7 +77,6 @@ fun List<String>.toListOfSteps(): List<Step> =
             "down" -> Down(amount)
             else -> null
         }
-
     }
 
 fun getFinalPosition(
