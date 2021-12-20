@@ -10,16 +10,13 @@ fun main() {
     val input = getLinesFromFile("v2021/day_05.txt")
 
     measureTimeAndPrint { input.parseAsLines().findNumberOfPointsWhereAtLeast2LinesOverlap() }
+    measureTimeAndPrint { input.parseAsLines().findNumberOfPointsWhereAtLeast2LinesOverlap(includingDiagonalLines = true) }
 }
 
-fun Iterable<Line>.findNumberOfPointsWhereAtLeast2LinesOverlap(): Int {
-
-    val horizontalAndVerticalLines = this
-        .filter { (start, end) ->
-            start.x == end.x || start.y == end.y
-        }
-
-    return horizontalAndVerticalLines
+fun Iterable<Line>.findNumberOfPointsWhereAtLeast2LinesOverlap(
+    includingDiagonalLines: Boolean = false
+): Int {
+    return filter { includingDiagonalLines || !it.isDiagonal }
         .flatMap { it.points }
         .groupingBy { it }
         .eachCount()
@@ -51,9 +48,21 @@ data class Line(
     private val minY = min(start.y, end.y)
     private val maxY = max(start.y, end.y)
 
+    val isDiagonal = minX != maxX && minY != maxY
+
     val points: Collection<Point> = when {
-        start.x == end.x -> (minY..maxY).map { Point(start.x, it) }
-        start.y == end.y ->  (minX..maxX).map { Point(it, start.y) }
-        else -> setOf()
+        start.x == end.x ->
+            (minY..maxY).map { Point(start.x, it) }
+        start.y == end.y ->
+            (minX..maxX).map { Point(it, start.y) }
+        start.x < end.x && start.y < end.y ->
+            (start.x..end.x).mapIndexed { index, x -> Point(x, start.y + index) }
+        start.x < end.x && start.y > end.y ->
+            (start.x..end.x).mapIndexed { index, x -> Point(x, start.y - index) }
+        start.x > end.x && start.y < end.y ->
+            (end.x..start.x).mapIndexed { index, x -> Point(x, end.y - index) }
+        start.x > end.x && start.y > end.y ->
+            (end.x..start.x).mapIndexed { index, x -> Point(x, end.y + index) }
+        else -> listOf()
     }
 }
