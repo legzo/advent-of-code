@@ -6,13 +6,19 @@ import gg.jte.aoc.measureTimeAndPrint
 fun main() {
     val input = getTextFromFile("v2022/day01.txt")
     measureTimeAndPrint {  findMostCaloriesCarriedByAnElf(input) }
+    measureTimeAndPrint {  findCaloriesCarriedByTop3Elves(input) }
 }
 
+fun findMostCaloriesCarriedByAnElf(input: String): Int? =
+    elvesSortedByCarriedCalories(input).maxOrNull()
 
-fun findMostCaloriesCarriedByAnElf(input: String): Int =
+
+fun findCaloriesCarriedByTop3Elves(input: String): Int =
+    elvesSortedByCarriedCalories(input).take(3).sum()
+
+fun elvesSortedByCarriedCalories(input: String): List<Int> =
     input
         .trim()
         .split("\n\n")
-        .maxOfOrNull { it.split("\n").sumOf(String::toInt) }
-        ?: 0
-
+        .map { it.split("\n").sumOf(String::toInt) }
+        .sortedDescending()

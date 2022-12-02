@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test
 
 class Day01Test {
 
-
-    @Test
-    fun `find elf with most calories`() {
-        val input = """
+    private val input = """
         1000
         2000
         3000
@@ -24,7 +21,14 @@ class Day01Test {
 
         10000""".trimIndent()
 
+
+    @Test
+    fun `find elf with most calories`() {
         findMostCaloriesCarriedByAnElf(input) shouldBe 24000
     }
 
+    @Test
+    fun `find calories carried by top 3 elves`() {
+        findCaloriesCarriedByTop3Elves(input) shouldBe 45000
+    }
 }
