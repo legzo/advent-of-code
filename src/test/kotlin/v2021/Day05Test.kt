@@ -1,9 +1,5 @@
-package v2021
+package gg.jte.aoc.v2021
 
-import gg.jte.aoc.v2021.Line
-import gg.jte.aoc.v2021.Point
-import gg.jte.aoc.v2021.findNumberOfPointsWhereAtLeast2LinesOverlap
-import gg.jte.aoc.v2021.parseAsLines
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.collections.shouldNotBeIn
 import io.kotest.matchers.shouldBe

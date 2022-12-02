@@ -1,9 +1,5 @@
-package v2021
+package gg.jte.aoc.v2021
 
-import gg.jte.aoc.v2021.calculateCO2ScrubberRating
-import gg.jte.aoc.v2021.calculateEpsilonRate
-import gg.jte.aoc.v2021.calculateGammaRate
-import gg.jte.aoc.v2021.calculateOxygenGeneratorRating
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 

@@ -1,7 +1,5 @@
-package v2021
+package gg.jte.aoc.v2021
 
-import gg.jte.aoc.v2021.CostStrategies
-import gg.jte.aoc.v2021.findMinimumFuelAmountRequired
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 

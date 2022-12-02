@@ -1,13 +1,6 @@
-package v2021
+package gg.jte.aoc.v2021
 
-import gg.jte.aoc.v2021.Position
-import gg.jte.aoc.v2021.State
-import gg.jte.aoc.v2021.Step.Down
-import gg.jte.aoc.v2021.Step.Forward
-import gg.jte.aoc.v2021.Step.Up
-import gg.jte.aoc.v2021.getFinalPosition
-import gg.jte.aoc.v2021.getFinalState
-import gg.jte.aoc.v2021.toListOfSteps
+import gg.jte.aoc.v2021.Step.*
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 

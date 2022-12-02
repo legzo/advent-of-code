@@ -1,10 +1,5 @@
-package v2021
+package gg.jte.aoc.v2021
 
-import gg.jte.aoc.v2021.Board
-import gg.jte.aoc.v2021.Cell
-import gg.jte.aoc.v2021.findFirstWinningBoard
-import gg.jte.aoc.v2021.findLastWinningBoard
-import gg.jte.aoc.v2021.mark
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 

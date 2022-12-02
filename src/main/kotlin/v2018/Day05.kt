@@ -1,10 +1,7 @@
 package gg.jte.aoc.v2018
 
 import gg.jte.aoc.getLinesFromFile
-import gg.jte.aoc.v2018.Polymer.Status.FoundMatch
-import gg.jte.aoc.v2018.Polymer.Status.LookingForMatch
-import gg.jte.aoc.v2018.Polymer.Status.RemovedMatch
-import java.time.LocalDateTime
+import gg.jte.aoc.v2018.Polymer.Status.*
 
 fun main() {
 
