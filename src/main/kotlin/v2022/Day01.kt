@@ -20,5 +20,5 @@ fun elvesSortedByCarriedCalories(input: String): List<Int> =
     input
         .trim()
         .split("\n\n")
-        .map { it.split("\n").sumOf(String::toInt) }
+        .map { it.lines().sumOf(String::toInt) }
         .sortedDescending()
