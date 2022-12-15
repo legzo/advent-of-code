@@ -12,20 +12,39 @@ fun main() {
             .directoriesWithSizeLessThan(100_000)
             .sumOf { it.totalSize }
     }
-
+    measureTimeAndPrint {
+        parseFiles(input)
+            .findSmallestDirectoryToDelete(freeSpaceNeeded = 30_000_000, totalDiskSpace = 70_000_000)
+    }
 }
 
-fun List<FileWithPath>.directoriesWithSizeLessThan(sizeLimit: Int): List<DirectorySummary> {
+fun  Iterable<FileWithPath>.findSmallestDirectoryToDelete(freeSpaceNeeded: Int, totalDiskSpace: Int): DirectorySummary {
+
+    val directories = directoriesWithSizes()
+    val rootDir = directories.first { it.name == "/" }
+    val amountToFree = totalDiskSpace - rootDir.totalSize
+
+    return directories
+        .sortedBy { it.totalSize }
+        .first { it.totalSize > freeSpaceNeeded - amountToFree }
+}
+
+
+
+fun Iterable<FileWithPath>.directoriesWithSizes(): List<DirectorySummary> {
     val directoriesWithSize = mutableMapOf<String, Int>()
 
     forEach { fileWithPath ->
         addSizeToDirectory(directoriesWithSize, fileWithPath.size, fileWithPath.path)
     }
 
-    return directoriesWithSize.filterValues { it < sizeLimit }
+    return directoriesWithSize
         .map { (name, totalSize) -> DirectorySummary(name = name, totalSize = totalSize) }
         .sortedBy { it.name }
 }
+
+fun Iterable<FileWithPath>.directoriesWithSizeLessThan(sizeLimit: Int): List<DirectorySummary> =
+    directoriesWithSizes().filter { it.totalSize < sizeLimit }
 
 fun addSizeToDirectory(
     directoriesWithSize: MutableMap<String, Int>,

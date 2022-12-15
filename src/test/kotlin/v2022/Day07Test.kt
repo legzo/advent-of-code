@@ -73,6 +73,17 @@ class Day07Test {
             name shouldBe "/a/e"
             totalSize shouldBe 584
         }
+    }
 
+    @Test
+    fun `find smallest directory to delete`() {
+        val directory = parseFiles(input)
+            .findSmallestDirectoryToDelete(freeSpaceNeeded = 30_000_000, totalDiskSpace = 70_000_000)
+
+        directory shouldBe DirectorySummary(
+            name = "/d",
+            totalSize = 24933642
+        )
     }
 }
+
