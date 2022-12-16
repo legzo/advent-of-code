@@ -2,11 +2,16 @@ package gg.jte.aoc.v2022
 
 import gg.jte.aoc.getTextFromFile
 import gg.jte.aoc.measureTimeAndPrint
-import gg.jte.aoc.v2022.Direction.*
+import gg.jte.aoc.takeUntil
+import gg.jte.aoc.v2022.Direction.DOWN
+import gg.jte.aoc.v2022.Direction.LEFT
+import gg.jte.aoc.v2022.Direction.RIGHT
+import gg.jte.aoc.v2022.Direction.UP
 
 fun main() {
     val input = getTextFromFile("v2022/day08.txt")
     measureTimeAndPrint { MapOfTrees(input).countVisibleTrees() }
+    measureTimeAndPrint { MapOfTrees(input).findMaxScenicScore() }
 }
 
 class MapOfTrees(asString: String) {
@@ -21,9 +26,9 @@ class MapOfTrees(asString: String) {
 
     fun trees(direction: Direction, of: Tree): List<Int> =
         when (direction) {
-            UP -> verticalTrees(fromY = 0, untilY = of.y, atX = of.x)
+            UP -> verticalTrees(fromY = 0, untilY = of.y, atX = of.x).reversed()
             DOWN -> verticalTrees(fromY = of.y + 1, untilY = height, atX = of.x)
-            LEFT -> horizontalTrees(0, of.x, of.y)
+            LEFT -> horizontalTrees(0, of.x, of.y).reversed()
             RIGHT -> horizontalTrees(of.x + 1, width, of.y)
         }
 
@@ -40,6 +45,25 @@ class MapOfTrees(asString: String) {
             }
         }
 
+    fun findMaxScenicScore(): Int =
+        (0 until width).maxOf { x ->
+            (0 until height).maxOf { y ->
+                Tree(x = x, y = y).scenicScore()
+            }
+        }
+
+}
+
+context(MapOfTrees)
+fun Tree.scenicScore(): Int {
+    val treeHeight = treeHeightAt(x = x, y = y)
+    return Direction.values()
+        .map { direction ->
+            trees(direction, of = this)
+                .takeUntil { it >= treeHeight }
+                .count()
+        }
+        .reduce(Int::times)
 }
 
 context(MapOfTrees)

@@ -1,6 +1,9 @@
 package gg.jte.aoc.v2022
 
-import gg.jte.aoc.v2022.Direction.*
+import gg.jte.aoc.v2022.Direction.DOWN
+import gg.jte.aoc.v2022.Direction.LEFT
+import gg.jte.aoc.v2022.Direction.RIGHT
+import gg.jte.aoc.v2022.Direction.UP
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -40,9 +43,9 @@ class Day08Test {
 
     @Test
     fun `should get trees for direction`() {
-        mapOfTrees.trees(direction = UP, of = Tree(x = 3, y = 3)) shouldBe listOf(7, 1, 3)
+        mapOfTrees.trees(direction = UP, of = Tree(x = 3, y = 3)) shouldBe listOf(3, 1, 7)
         mapOfTrees.trees(direction = DOWN, of = Tree(x = 3, y = 3)) shouldBe listOf(9)
-        mapOfTrees.trees(direction = LEFT, of = Tree(x = 3, y = 3)) shouldBe listOf(3, 3, 5)
+        mapOfTrees.trees(direction = LEFT, of = Tree(x = 3, y = 3)) shouldBe listOf(5, 3, 3)
         mapOfTrees.trees(direction = RIGHT, of = Tree(x = 3, y = 3)) shouldBe listOf(9)
     }
 
@@ -77,6 +80,11 @@ class Day08Test {
     @Test
     fun `should count visible trees`() {
         mapOfTrees.countVisibleTrees() shouldBe 21
+    }
+
+    @Test
+    fun `should find top scenic score`() {
+        mapOfTrees.findMaxScenicScore() shouldBe 8
     }
 }
 
