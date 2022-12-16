@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.0"
+    kotlin("jvm") version "1.7.21"
     id("com.github.ben-manes.versions") version "0.39.0"
 }
 
@@ -14,11 +14,11 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.slf4j:slf4j-api:1.7.32")
+    implementation("org.slf4j:slf4j-api:2.0.5")
 
-    testImplementation("ch.qos.logback:logback-classic:1.2.7")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
-    testImplementation("io.kotest:kotest-assertions-core:4.6.3")
+    testImplementation("ch.qos.logback:logback-classic:1.4.5")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
+    testImplementation("io.kotest:kotest-assertions-core:5.5.4")
 }
 
 tasks.withType<Test> {
@@ -27,6 +27,7 @@ tasks.withType<Test> {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.freeCompilerArgs = listOf("-Xcontext-receivers")
 }
 
 tasks.dependencyUpdates {
