@@ -18,9 +18,9 @@ class Day08Test {
 
     @Test
     fun `should return char at`() {
-        mapOfTrees.treeAt(x = 0, y = 0) shouldBe 3
-        mapOfTrees.treeAt(x = 4, y = 2) shouldBe 2
-        mapOfTrees.treeAt(x = 4, y = 3) shouldBe 9
+        mapOfTrees.treeHeightAt(x = 0, y = 0) shouldBe 3
+        mapOfTrees.treeHeightAt(x = 4, y = 2) shouldBe 2
+        mapOfTrees.treeHeightAt(x = 4, y = 3) shouldBe 9
     }
 
     @Test

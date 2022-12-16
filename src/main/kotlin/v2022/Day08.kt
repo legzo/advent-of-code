@@ -9,11 +9,15 @@ fun main() {
     measureTimeAndPrint { MapOfTrees(input).countVisibleTrees() }
 }
 
-class MapOfTrees(private val asString: String) {
+class MapOfTrees(asString: String) {
     val height = asString.lines().size
     val width = asString.lines().first().length
 
-    fun treeAt(x: Int, y: Int): Int = asString.lines()[y][x].toString().toInt()
+    private val trees = asString.lines().map { row ->
+        row.map(Char::digitToInt).toIntArray()
+    }.toTypedArray()
+
+    fun treeHeightAt(x: Int, y: Int): Int = trees[y][x]
 
     fun trees(direction: Direction, of: Tree): List<Int> =
         when (direction) {
@@ -24,15 +28,14 @@ class MapOfTrees(private val asString: String) {
         }
 
     private fun horizontalTrees(fromX: Int, untilX: Int, atY: Int) =
-        (fromX until untilX).map { treeAt(it, atY) }
+        (fromX until untilX).map { treeHeightAt(it, atY) }
 
     private fun verticalTrees(fromY: Int, untilY: Int, atX: Int) =
-        (fromY until untilY).map { treeAt(atX, it) }
+        (fromY until untilY).map { treeHeightAt(atX, it) }
 
     fun countVisibleTrees(): Int =
         (0 until width).sumOf { x ->
             (0 until height).count { y ->
-                println("Checkin $x:$y")
                 Tree(x = x, y = y).isVisible()
             }
         }
@@ -41,9 +44,9 @@ class MapOfTrees(private val asString: String) {
 
 context(MapOfTrees)
 fun Tree.isVisible(): Boolean {
-    val height = treeAt(x = x, y = y)
+    val treeHeight = treeHeightAt(x = x, y = y)
     return Direction.values().any { direction ->
-        trees(direction, of = this).all { it < height }
+        trees(direction, of = this).all { it < treeHeight }
     }
 }
 
