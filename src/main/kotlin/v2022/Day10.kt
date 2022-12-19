@@ -6,6 +6,7 @@ import gg.jte.aoc.measureTimeAndPrint
 fun main() {
     val input = getTextFromFile("v2022/day10.txt")
     measureTimeAndPrint { parseAsCycles(input).sumOfSignalStrengths() }
+    measureTimeAndPrint { "\n" + parseAsCycles(input).signalValues().draw() }
 }
 
 fun parseAsCycles(input: String) =
@@ -27,6 +28,17 @@ fun List<Cycle>.sumOfSignalStrengths(): Int {
         signalValues.signalStrength(it)
     } + signalValues.signalStrength(20)
 }
+
+fun List<Int>.draw(): String =
+    (1..240).joinToString(separator = "") { cycle ->
+        val currentIndex = this[cycle - 1]
+        when (cycle % 40) {
+            0 -> ".\n"
+            in (currentIndex..currentIndex + 2) -> "#"
+            else -> "."
+        }
+    }
+
 
 fun List<Cycle>.signalValues(): List<Int> =
     scan(initial = 1) { acc, cycle ->

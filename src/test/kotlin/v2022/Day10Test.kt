@@ -38,6 +38,19 @@ class Day10Test {
         parseAsCycles(input2).sumOfSignalStrengths() shouldBe 13140
     }
 
+    @Test
+    fun `should draw signal`() {
+        parseAsCycles(input2).signalValues().draw() shouldBe """
+            ##..##..##..##..##..##..##..##..##..##..
+            ###...###...###...###...###...###...###.
+            ####....####....####....####....####....
+            #####.....#####.....#####.....#####.....
+            ######......######......######......####
+            #######.......#######.......#######.....
+            
+            """.trimIndent()
+    }
+
     private val input2 = """
         addx 15
         addx -11
