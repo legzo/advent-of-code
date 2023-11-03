@@ -21,7 +21,6 @@ internal class Day08Test {
 
     @Test
     fun `should count occurrences of 1 4 7 and 8`() {
-
         input
             .lines()
             .countOccurrencesOf147And8() shouldBe 26
