@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.21"
-    id("com.github.ben-manes.versions") version "0.39.0"
+    kotlin("jvm") version "1.9.21"
+    id("com.github.ben-manes.versions") version "0.50.0"
 }
 
 group = "com.orange.ccmd.dojo"
@@ -14,11 +14,11 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.slf4j:slf4j-api:2.0.5")
+    implementation("org.slf4j:slf4j-api:2.0.9")
 
-    testImplementation("ch.qos.logback:logback-classic:1.4.5")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
-    testImplementation("io.kotest:kotest-assertions-core:5.5.4")
+    testImplementation("ch.qos.logback:logback-classic:1.4.13")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
 }
 
 tasks.withType<Test> {
