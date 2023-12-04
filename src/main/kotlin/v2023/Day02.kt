@@ -7,6 +7,7 @@ import gg.jte.aoc.parseWithRegex
 fun main() {
     val input = getTextFromFile("v2023/day02.txt")
     measureTimeAndPrint { input.parseAsGames().filter { it.isPossible() }.sumOf { it.id } }
+    measureTimeAndPrint { input.parseAsGames().sumOf { it.power() } }
 }
 
 data class Game(
@@ -48,3 +49,10 @@ fun Game.isPossible(): Boolean =
     draws
         .all { it.red <= 12 && it.green <= 13 && it.blue <= 14 }
 
+fun Game.power(): Int {
+    val minRed = draws.maxOf { it.red }
+    val minGreen = draws.maxOf { it.green }
+    val minBlue = draws.maxOf { it.blue }
+
+    return minRed * minGreen * minBlue
+}

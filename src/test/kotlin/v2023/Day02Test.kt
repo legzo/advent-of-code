@@ -4,6 +4,7 @@ import gg.jte.aoc.v2023.Draw
 import gg.jte.aoc.v2023.Game
 import gg.jte.aoc.v2023.isPossible
 import gg.jte.aoc.v2023.parseAsGames
+import gg.jte.aoc.v2023.power
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
@@ -46,4 +47,8 @@ class Day02Test {
             .filter { it.isPossible() } shouldHaveSize 3
     }
 
+    @Test
+    fun `calculate power`() {
+        input.parseAsGames().map { it.power() } shouldBe listOf(48, 12, 1560, 630, 36)
+    }
 }
