@@ -13,6 +13,13 @@ fun main() {
     measureTimeAndPrint { input.countValidPassportsItemsWithFieldsValidation() }
 }
 
+val heightRegex = Regex("([0-9]+)(cm|in)")
+val hairColorRegex = Regex("#[0-9a-f]{6}")
+val passportIdRegex = Regex("[0-9]{9}")
+
+fun byShortLabel(shortLabel: String): PassportField? =
+    PassportField.entries.firstOrNull { it.shortLabel == shortLabel }
+
 enum class PassportField(
     val shortLabel: String,
     val validate: (String) -> Boolean,
@@ -22,7 +29,7 @@ enum class PassportField(
     IssueYear("iyr", validate = isIntBetween(2010, 2020)),
     ExpirationYear("eyr", validate = isIntBetween(2020, 2030)),
     Height("hgt", validate = {
-        val matchResult = PassportField.heightRegex.matchEntire(it)
+        val matchResult = heightRegex.matchEntire(it)
         if (matchResult != null) {
             val (heightValue, unit) = matchResult.destructured
             when (unit) {
@@ -32,19 +39,11 @@ enum class PassportField(
             }
         } else false
     }),
-    HairColor("hcl", validate = { PassportField.hairColorRegex.matches(it) }),
+    HairColor("hcl", validate = { hairColorRegex.matches(it) }),
     EyeColor("ecl", validate = { it in setOf("amb", "blu", "brn", "gry", "grn", "hzl", "oth") }),
-    PassportId("pid", validate = { PassportField.passportIdRegex.matches(it) }),
+    PassportId("pid", validate = { passportIdRegex.matches(it) }),
     CountryId("cid", validate = { true }, optional = true);
 
-    companion object {
-        val heightRegex = Regex("([0-9]+)(cm|in)")
-        val hairColorRegex = Regex("#[0-9a-f]{6}")
-        val passportIdRegex = Regex("[0-9]{9}")
-
-        fun byShortLabel(shortLabel: String): PassportField? =
-            values().firstOrNull { it.shortLabel == shortLabel }
-    }
 }
 
 fun String.countValidPassportsItems() =
@@ -76,7 +75,7 @@ private fun extractFields(passportAsString: String) =
             if (keyValues.size != 2) return@mapNotNull null
             val key = keyValues[0]
             val value = keyValues[1]
-            val field = PassportField.byShortLabel(key)
+            val field = byShortLabel(key)
             if (field != null) {
                 field to value
             } else null
@@ -86,11 +85,11 @@ data class Passport(
     val fields: Map<PassportField, String>
 ) {
     fun isStructurallyValid() =
-        PassportField.values()
+        PassportField.entries
             .all { it.optional || (fields[it]?.isNotBlank() ?: false) }
 
     fun allFieldsAreValid() =
-        PassportField.values()
+        PassportField.entries
             .all {
                 it.optional
                         || fields[it]?.let { value -> it.validate(value) } ?: false
