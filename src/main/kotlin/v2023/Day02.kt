@@ -3,6 +3,7 @@ package gg.jte.aoc.v2023
 import gg.jte.aoc.getTextFromFile
 import gg.jte.aoc.measureTimeAndPrint
 import gg.jte.aoc.parseWithRegex
+import java.lang.Integer.max
 
 fun main() {
     val input = getTextFromFile("v2023/day02.txt")
@@ -50,6 +51,18 @@ fun Game.isPossible(): Boolean =
         .all { it.red <= 12 && it.green <= 13 && it.blue <= 14 }
 
 fun Game.power(): Int {
+    val optimalDraw = draws.fold(Draw(0,0,0)) { acc, current ->
+        Draw(
+            red = max(acc.red, current.red),
+            green = max(acc.green, current.green),
+            blue = max(acc.blue, current.blue),
+        )
+    }
+
+    return optimalDraw.red * optimalDraw.green * optimalDraw.blue
+}
+
+fun Game.power2(): Int {
     val minRed = draws.maxOf { it.red }
     val minGreen = draws.maxOf { it.green }
     val minBlue = draws.maxOf { it.blue }
