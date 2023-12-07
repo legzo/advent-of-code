@@ -1,10 +1,5 @@
-package v2023
+package gg.jte.aoc.v2023
 
-import gg.jte.aoc.v2023.Draw
-import gg.jte.aoc.v2023.Game
-import gg.jte.aoc.v2023.isPossible
-import gg.jte.aoc.v2023.parseAsGames
-import gg.jte.aoc.v2023.power
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test

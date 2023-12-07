@@ -1,7 +1,5 @@
-package v2023
+package gg.jte.aoc.v2023
 
-import gg.jte.aoc.v2023.findCalibrationValues
-import gg.jte.aoc.v2023.replaceLiteralDigits
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
