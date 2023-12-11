@@ -7,62 +7,26 @@ import java.io.File
 fun main() {
     val input = getTextFromFile("v2023/day03.txt")
     measureTimeAndPrint {
-        val context = input.parse()
-
-        val result = context
+        input.parse()
             .partNumbers
-            .map { it.also { println(it.value) } }
             .sumOf { it.value.toInt() }
+    }
 
-        context.dump(filePath = "out.txt")
-
-        result
+    measureTimeAndPrint {
+        input.parse()
+            .gears
+            .values
+            .sum()
     }
 }
 
-private fun ParsingContext.dump(filePath: String) {
-    val spreadNumbers = numbers.spread()
-    val spreadPartNumbers = partNumbers.spread()
-    val s = ((0..139).joinToString(separator = "\n") { y ->
-        (0..139).joinToString(separator = "") { x ->
-            val symbol = symbols.firstOrNull { it.point.x == x && it.point.y == y }
-            val partNumber = spreadPartNumbers.firstOrNull { it.point.x == x && it.point.y == y }
-            val number = spreadNumbers.firstOrNull { it.point.x == x && it.point.y == y }
-            symbol?.value
-                ?: if (number != null && partNumber == null) "o" else number?.value
-                    ?: "."
-        }
-    })
 
-    File(filePath).writeText(s)
-}
-
-private fun List<Number>.spread() =
-    flatMap { number ->
-        number.value
-            .mapIndexed { index, char ->
-                Number(point = number.point.copy(x = number.point.x + index), value = char.toString())
-            }
-    }
-
-
-data class Number(
-    val point: Point,
-    val value: String,
-) {
+data class Number(val point: Point, val value: String) {
     val length: Int = value.length
 }
 
-data class Symbol(
-    val point: Point,
-    val value: String,
-)
-
-data class Point(
-    val x: Int,
-    val y: Int
-)
-
+data class Symbol(val point: Point, val value: String)
+data class Point(val x: Int, val y: Int)
 data class ParsingContext(
     val symbols: List<Symbol> = listOf(),
     val numbers: List<Number> = listOf(),
@@ -89,9 +53,18 @@ data class ParsingContext(
             )
         } else this
 
-
     val partNumbers: List<Number>
         get() = numbers.filter(::hasASymbolInNeighbourhood)
+
+    val gears
+        get() = numbers.flatMap(::getSymbolsInTheNeighbourhood)
+            .groupBy { (symbol, _) -> symbol }
+            .filter { it.value.size == 2 }
+            .mapValues { (_, match) ->
+                match
+                    .map { (_, number) -> number.value.toInt() }
+                    .reduce { a, b -> a * b }
+            }
 
     private fun hasASymbolInNeighbourhood(number: Number): Boolean {
         val symbolPoints = symbols.map { it.point }
@@ -105,6 +78,14 @@ data class ParsingContext(
             }
     }
 
+    private fun getSymbolsInTheNeighbourhood(number: Number): List<Pair<Symbol, Number>> =
+        (number.point.x - 1..(number.point.x + number.length))
+            .flatMap { x ->
+                (number.point.y - 1..(number.point.y + 1)).mapNotNull { y ->
+                    symbols.firstOrNull { it.point.x == x && it.point.y == y }
+                        ?.let { it to number }
+                }
+            }
 }
 
 fun String.parse(): ParsingContext {
@@ -134,3 +115,31 @@ fun String.parse(): ParsingContext {
         }
         .storeCurrentNumber()
 }
+
+
+//<editor-fold desc="Visu">
+private fun ParsingContext.dump(filePath: String) {
+    val spreadNumbers = numbers.spread()
+    val spreadPartNumbers = partNumbers.spread()
+    val s = ((0..139).joinToString(separator = "\n") { y ->
+        (0..139).joinToString(separator = "") { x ->
+            val symbol = symbols.firstOrNull { it.point.x == x && it.point.y == y }
+            val partNumber = spreadPartNumbers.firstOrNull { it.point.x == x && it.point.y == y }
+            val number = spreadNumbers.firstOrNull { it.point.x == x && it.point.y == y }
+            symbol?.value
+                ?: if (number != null && partNumber == null) "o" else number?.value
+                    ?: "."
+        }
+    })
+
+    File(filePath).writeText(s)
+}
+
+private fun List<Number>.spread() =
+    flatMap { number ->
+        number.value
+            .mapIndexed { index, char ->
+                Number(point = number.point.copy(x = number.point.x + index), value = char.toString())
+            }
+    }
+//</editor-fold>

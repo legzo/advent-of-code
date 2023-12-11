@@ -86,5 +86,10 @@ class Day03Test {
             .sumOf { it.value.toInt() } shouldBe 925
     }
 
-
+    @Test
+    fun `find symbols in neighbourhood`() {
+        input.parse()
+            .gears
+            .also { println(it) }
+    }
 }
