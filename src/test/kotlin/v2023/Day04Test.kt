@@ -28,8 +28,8 @@ class Day04Test {
     @Test
     fun `should find winning numbers`() {
         input.parseAsCards()
-            .findWinningNumbers()
-            .values.first() shouldContainExactlyInAnyOrder listOf(48, 83, 17, 86)
+            .first()
+            .findMatchingNumbers() shouldContainExactlyInAnyOrder listOf(48, 83, 17, 86)
     }
 
     @Test
@@ -38,4 +38,10 @@ class Day04Test {
             .calculateScores() shouldBe listOf(8, 2, 2, 1, 0, 0)
     }
 
+    @Test
+    fun `should find number of cards after copies`() {
+        input.parseAsCards()
+            .process()
+            .countAllCopies() shouldBe 30
+    }
 }
