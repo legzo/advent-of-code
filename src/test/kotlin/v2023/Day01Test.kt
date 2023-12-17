@@ -3,7 +3,7 @@ package gg.jte.aoc.v2023
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day01Test {
+internal class Day01Test {
 
     private val input = """
         1abc2
@@ -48,4 +48,5 @@ class Day01Test {
             .replaceLiteralDigits()
             .findCalibrationValues() shouldBe listOf(88, 29, 83, 13, 84, 42, 14, 76)
     }
+
 }

@@ -3,7 +3,7 @@ package gg.jte.aoc.v2020
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day02Test {
+internal class Day02Test {
 
     @Test
     fun `should find compliant passwords for old policy`() {
@@ -45,5 +45,3 @@ class Day02Test {
     }
 
 }
-
-

@@ -4,7 +4,7 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day03Test {
+internal class Day03Test {
 
     @Test
     fun `load claim from string`() {
@@ -56,7 +56,3 @@ class Day03Test {
     }
 
 }
-
-
-
-

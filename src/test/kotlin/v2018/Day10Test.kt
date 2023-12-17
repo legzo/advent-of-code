@@ -3,7 +3,7 @@ package gg.jte.aoc.v2018
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day10Test {
+internal class Day10Test {
 
     private val myParticles = Particle.loadList(
         """
@@ -101,4 +101,5 @@ class Day10Test {
             #...#..###
             """.trimIndent()
     }
+
 }

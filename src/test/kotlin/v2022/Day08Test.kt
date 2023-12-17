@@ -7,7 +7,7 @@ import gg.jte.aoc.v2022.Direction.UP
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day08Test {
+internal class Day08Test {
 
     private val input = """
         30373
@@ -86,5 +86,5 @@ class Day08Test {
     fun `should find top scenic score`() {
         mapOfTrees.findMaxScenicScore() shouldBe 8
     }
-}
 
+}

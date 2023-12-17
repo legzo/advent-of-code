@@ -4,7 +4,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day06Test {
+internal class Day06Test {
 
     private val input = """
         COM)B
@@ -39,7 +39,5 @@ class Day06Test {
         listOf("K", "J", "E", "D", "C", "B", "COM")
             .minimalOrbitalTransfers(listOf("I", "D", "C", "B", "COM")) shouldBe 4
     }
+
 }
-
-
-

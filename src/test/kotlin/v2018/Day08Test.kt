@@ -3,7 +3,7 @@ package gg.jte.aoc.v2018
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day08Test {
+internal class Day08Test {
 
     private val expectedNode = Node(
         children = listOf(
@@ -46,6 +46,5 @@ class Day08Test {
     fun `should get node value`() {
         expectedNode.value shouldBe 66
     }
+
 }
-
-

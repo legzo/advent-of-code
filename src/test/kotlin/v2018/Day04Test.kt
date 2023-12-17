@@ -8,7 +8,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-class Day04Test {
+internal class Day04Test {
 
     private val fullDataset = listOf(
         "[1518-11-01 00:00] Guard #10 begins shift",
@@ -138,4 +138,5 @@ class Day04Test {
     fun `get checksum for strategy 2`() {
         fullDataset.getChecksumForStrategy2() shouldBe 4455
     }
+
 }

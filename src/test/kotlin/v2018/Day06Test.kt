@@ -3,7 +3,7 @@ package gg.jte.aoc.v2018
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day06Test {
+internal class Day06Test {
 
     private val inputCoords = listOf(
         Point(x = 1, y = 1),
@@ -31,5 +31,5 @@ class Day06Test {
     fun `should get safeAreas from coordinates`() {
         Grid(inputCoords).getSafestAreaSizeFor(32) shouldBe 16
     }
-}
 
+}

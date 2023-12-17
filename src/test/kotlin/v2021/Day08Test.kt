@@ -26,5 +26,4 @@ internal class Day08Test {
             .countOccurrencesOf147And8() shouldBe 26
     }
 
-
 }

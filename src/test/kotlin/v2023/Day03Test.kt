@@ -6,7 +6,7 @@ import io.kotest.matchers.collections.shouldNotContainAll
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day03Test {
+internal class Day03Test {
 
     private val input = """
         467..114..
@@ -92,4 +92,5 @@ class Day03Test {
             .gears
             .also { println(it) }
     }
+
 }

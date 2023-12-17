@@ -3,7 +3,7 @@ package gg.jte.aoc.v2020
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day06Test {
+internal class Day06Test {
 
     @Test
     fun `should count questions answered with yes by at least someone in a group`() {
@@ -51,4 +51,5 @@ class Day06Test {
             Group(results = listOf("b"))
         )
     }
+
 }

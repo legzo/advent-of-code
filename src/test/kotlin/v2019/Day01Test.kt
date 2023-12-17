@@ -31,4 +31,5 @@ internal class Day01Test {
         Module(mass = 1969).calculateTotalFuelNeeded() shouldBe 966
         Module(mass = 100756).calculateTotalFuelNeeded() shouldBe 50346
     }
+
 }

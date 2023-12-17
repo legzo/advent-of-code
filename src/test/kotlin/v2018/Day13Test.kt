@@ -7,7 +7,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day13Test {
+internal class Day13Test {
 
     @Test
     fun `should create tracks from string`() {
@@ -69,4 +69,5 @@ class Day13Test {
         paths[5, 3] shouldBe Path.BOTTOM_TO_RIGHT
         paths[0, 2] shouldBe Path.VERTICAL
     }
+
 }

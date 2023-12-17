@@ -3,7 +3,7 @@ package gg.jte.aoc.v2022
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day01Test {
+internal class Day01Test {
 
     private val input = """
         1000

@@ -3,7 +3,7 @@ package gg.jte.aoc.v2022
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day02Test {
+internal class Day02Test {
 
     private val input = """
         A Y
@@ -15,11 +15,9 @@ class Day02Test {
         parseAsRounds(input, Round::asChoices).sumOf { it.score } shouldBe 15
     }
 
-
     @Test
     fun `should calculate total score parsing as predictions`() {
         parseAsRounds(input, Round::asPrediction).sumOf { it.score } shouldBe 12
     }
-
 
 }

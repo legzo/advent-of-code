@@ -4,7 +4,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day02Test {
+internal class Day02Test {
 
     private val input = """
         Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
@@ -46,4 +46,5 @@ class Day02Test {
     fun `calculate power`() {
         input.parseAsGames().map { it.power() } shouldBe listOf(48, 12, 1560, 630, 36)
     }
+
 }

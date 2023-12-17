@@ -6,7 +6,7 @@ import gg.jte.aoc.v2018.Status.PENDING
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day07Test {
+internal class Day07Test {
 
     private val input = """
             Step C must be finished before step A can begin.
@@ -73,6 +73,5 @@ class Day07Test {
 
         listOf(taskA, taskC, taskZ).getAvailableTasks() shouldBe listOf(taskA, taskC)
     }
+
 }
-
-

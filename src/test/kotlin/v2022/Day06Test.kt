@@ -3,7 +3,7 @@ package gg.jte.aoc.v2022
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day06Test {
+internal class Day06Test {
 
     @Test
     fun `should find first marker index`() {
@@ -22,4 +22,5 @@ class Day06Test {
         findFirstMessageIndex("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg") shouldBe 29
         findFirstMessageIndex("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw") shouldBe 26
     }
+
 }

@@ -11,7 +11,7 @@ import gg.jte.aoc.v2020.PassportField.PassportId
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day04Test {
+internal class Day04Test {
 
     @Test
     fun `should validate passport`() {

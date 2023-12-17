@@ -3,7 +3,7 @@ package gg.jte.aoc.v2019
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day04Test {
+internal class Day04Test {
 
     @Test
     fun `should validate password`() {
@@ -16,6 +16,5 @@ class Day04Test {
     fun `should find valid passwords in range`() {
         "254032-789860".countValidPasswordsInRange() shouldBe 1033
     }
+
 }
-
-

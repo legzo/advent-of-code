@@ -3,7 +3,7 @@ package gg.jte.aoc.v2018
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day01Test {
+internal class Day01Test {
 
     @Test
     fun `calculate frequency drift`() {
@@ -20,4 +20,5 @@ class Day01Test {
         listOf("-6", "+3", "+8", "+5", "-6").findFirstRepeatingFrequency() shouldBe 5
         listOf("+7", "+7", "-2", "-7", "-4").findFirstRepeatingFrequency() shouldBe 14
     }
+
 }

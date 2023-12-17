@@ -3,7 +3,7 @@ package gg.jte.aoc.v2020
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day07Test {
+internal class Day07Test {
 
     private val input = """
         light red bags contain 1 bright white bag, 2 muted yellow bags.
@@ -116,4 +116,5 @@ class Day07Test {
 
         otherBagConstraints.countAllPossibleContainedBagsFor(shinyGoldBag) shouldBe 126
     }
+
 }

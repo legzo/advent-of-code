@@ -3,7 +3,7 @@ package gg.jte.aoc.v2022
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day10Test {
+internal class Day10Test {
 
     private val input = """
         noop
@@ -199,5 +199,5 @@ class Day10Test {
         noop
         noop
     """.trimIndent()
-}
 
+}

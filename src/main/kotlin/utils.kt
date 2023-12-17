@@ -1,7 +1,6 @@
 package gg.jte.aoc
 
 import java.io.File
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
 fun getLinesFromFile(filename: String): List<String> =
@@ -20,7 +19,6 @@ fun getLinesFromFileAsLongs(filename: String): List<Long> =
 
 fun shouldNotHappen(): Nothing = throw IllegalArgumentException("Should not happen !")
 
-@OptIn(ExperimentalTime::class)
 fun <T> measureTimeAndPrint(block: () -> T) {
     val (result, duration) = measureTimedValue(block)
     println("[${duration.inWholeMilliseconds}ms] Result is $result")

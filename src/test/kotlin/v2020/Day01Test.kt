@@ -3,7 +3,7 @@ package gg.jte.aoc.v2020
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day01Test {
+internal class Day01Test {
 
     @Test
     fun `should find pair with sum equal to total`() {
@@ -16,4 +16,5 @@ class Day01Test {
         listOf(1721, 979, 366, 299, 675, 1456)
             .findTripleMatching { it.first + it.second + it.third == 2020 } shouldBe Triple(979, 366, 675)
     }
+    
 }

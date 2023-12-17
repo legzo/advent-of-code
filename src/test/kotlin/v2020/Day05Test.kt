@@ -3,7 +3,7 @@ package gg.jte.aoc.v2020
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day05Test {
+internal class Day05Test {
 
     @Test
     fun `should calcultate seat coordinates`() {

@@ -3,7 +3,7 @@ package gg.jte.aoc.v2022
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day04Test {
+internal class Day04Test {
 
     private val input = """
         2-4,6-8
@@ -14,7 +14,6 @@ class Day04Test {
         2-6,4-8
         """.trimIndent()
 
-
     @Test
     fun `should count fully overlapping ranges`() {
         countFullyOverlappingRanges(input) shouldBe 2
@@ -24,6 +23,5 @@ class Day04Test {
     fun `should count overlapping ranges`() {
         countOverlappingRanges(input) shouldBe 4
     }
-
 
 }

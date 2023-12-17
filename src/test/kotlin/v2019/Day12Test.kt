@@ -3,7 +3,7 @@ package gg.jte.aoc.v2019
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day12Test {
+internal class Day12Test {
 
     @Test
     fun `should apply velocity`() {
@@ -102,9 +102,5 @@ class Day12Test {
         """.trimIndent()
         ).energy shouldBe 179
     }
+
 }
-
-
-
-
-

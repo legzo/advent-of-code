@@ -8,7 +8,7 @@ import gg.jte.aoc.v2020.Termination.InfiniteLoop
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day08Test {
+internal class Day08Test {
 
     private val input = """
         nop +0

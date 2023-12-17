@@ -3,7 +3,7 @@ package gg.jte.aoc.v2020
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day03Test {
+internal class Day03Test {
 
     private val input = """
             ..##.......
@@ -40,6 +40,3 @@ class Day03Test {
             ) shouldBe 336
     }
 }
-
-
-

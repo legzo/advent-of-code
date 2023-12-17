@@ -5,7 +5,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day07Test {
+internal class Day07Test {
 
     val input = """
         $ cd /
@@ -85,5 +85,5 @@ class Day07Test {
             totalSize = 24933642
         )
     }
-}
 
+}

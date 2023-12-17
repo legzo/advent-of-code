@@ -3,7 +3,7 @@ package gg.jte.aoc.v2018
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day05Test {
+internal class Day05Test {
 
     @Test
     fun `should react polymer`() {
@@ -26,4 +26,5 @@ class Day05Test {
         ('c' reactsWith 'C') shouldBe true
         ('A' reactsWith 'a') shouldBe true
     }
+
 }

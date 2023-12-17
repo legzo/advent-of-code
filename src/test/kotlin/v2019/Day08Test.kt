@@ -3,7 +3,7 @@ package gg.jte.aoc.v2019
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day08Test {
+internal class Day08Test {
 
     @Test
     fun `should parse layers`() {
@@ -40,9 +40,5 @@ class Day08Test {
             Layer("0000", 2, 2)
         ).mergeAll() shouldBe Layer("0110", 2, 2)
     }
+
 }
-
-
-
-
-

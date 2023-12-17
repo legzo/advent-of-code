@@ -3,7 +3,7 @@ package gg.jte.aoc.v2020
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day10Test {
+internal class Day10Test {
 
     private val input = """
         16
@@ -85,4 +85,5 @@ class Day10Test {
             .findCompatibleAdaptersList()
             .getVoltageDifferences() shouldBe mapOf(1 to 22, 3 to 10)
     }
+
 }

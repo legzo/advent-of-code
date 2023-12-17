@@ -3,7 +3,7 @@ package gg.jte.aoc.v2018
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-class Day02Test {
+internal class Day02Test {
 
     @Test
     fun `caculate checksum`() {
@@ -45,6 +45,5 @@ class Day02Test {
      fun `get common chars only`() {
          "fghij".commonCharsWith("fguij") shouldBe "fgij"
      }
+
 }
-
-

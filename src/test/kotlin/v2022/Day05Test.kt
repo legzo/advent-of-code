@@ -6,7 +6,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import java.util.Stack
 
-class Day05Test {
+internal class Day05Test {
 
     private val input = """
             [D]    
@@ -55,4 +55,5 @@ class Day05Test {
         finalState shouldHaveSize 3
         finalState.asMessage() shouldBe "MCD"
     }
+
 }
