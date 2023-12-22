@@ -1,8 +1,11 @@
 package gg.jte.aoc.v2023
 
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
+import kotlin.math.max
+import kotlin.math.min
 
 internal class Day05Test {
 
@@ -44,7 +47,7 @@ internal class Day05Test {
 
     @Test
     fun `should parse almanac`() {
-        val almanac = input.parseAsAlmanac()
+        val almanac = input.parseAsAlmanac(::parseIndividualSeeds)
         almanac.seeds shouldBe listOf(79, 14, 55, 13)
         almanac.maps shouldHaveSize 7
         almanac.maps.first().ranges shouldHaveSize 2
@@ -102,7 +105,79 @@ internal class Day05Test {
 
     @Test
     fun `should map seeds all the way`() {
-        input.parseAsAlmanac().getFinalSeedsLocations() shouldBe listOf(82, 43, 86, 35)
+        input.parseAsAlmanac(::parseIndividualSeeds).getFinalSeedsLocations() shouldBe listOf(82, 43, 86, 35)
     }
 
+    @Test
+    fun `should parse seeds as ranges`() {
+        parseSeedsAsRanges("79 14 55 13") shouldBe listOf(79L..92L, 55L..67L)
+    }
+
+    @Test
+    fun `should make subrange`() {
+        (10L..20L) inter (5L..25L) shouldBe (10L..20L)
+        (10L..20L) inter (5L..20L) shouldBe (10L..20L)
+        (10L..20L) inter (5L..15L) shouldBe (10L..15L)
+        (10L..20L) inter (15L..20L) shouldBe (15L..20L)
+        (10L..20L) inter (15L..25L) shouldBe (15L..20L)
+        (10L..20L) inter (10L..20L) shouldBe (10L..20L)
+        (10L..20L) inter (0L..5L) shouldBe null
+    }
+
+    private infix fun LongRange.inter(range2: LongRange): LongRange? {
+        return if (intersect(range2).isEmpty()) null
+        else max(first, range2.first)..min(last, range2.last)
+    }
+
+    @Test
+    fun `should translate range`() {
+        val almanacRange = AlmanacRange(
+            sourceRangeStart = 5,
+            destinationRangeStart = 10,
+            length = 10
+        )
+        almanacRange.translate(5L..25L) shouldBe (10L..20L)
+
+        almanacRange.translate(5L..10L) shouldBe (10L..15L)
+
+        almanacRange.translate(0L..4L) shouldBe null
+
+        almanacRange.translate(20L..25L) shouldBe null
+
+        almanacRange.translate(0L..25L) shouldBe (10L..20L)
+    }
+
+    @Test
+    fun `should fill map`() {
+        val map = AlmanacMap(
+            ranges = listOf(
+                AlmanacRange(
+                    sourceRangeStart = 50,
+                    destinationRangeStart = 52,
+                    length = 40,
+                ),
+                AlmanacRange(
+                    sourceRangeStart = 95,
+                    destinationRangeStart = 50,
+                    length = 2,
+                )
+            )
+        )
+
+        val seedsRanges = listOf((40L..70L), (79L..90L))
+
+        map.fillFor(seedsRanges).ranges shouldContainAll listOf(
+            AlmanacRange.build(start = 40, end = 50, offset = 0),
+            AlmanacRange.build(start = 50, end = 90, offset = 2),
+            AlmanacRange.build(start = 90, end = 95, offset = 0),
+            AlmanacRange.build(start = 95, end = 97, offset = -45),
+        )
+    }
+
+    @Test
+    fun `should process seeds ranges`() {
+        processRanges(input)
+            .sortedBy { it.first }
+            .minOf { it.first } shouldBe 46
+    }
 }
