@@ -20,7 +20,6 @@ fun main() {
     }
 }
 
-
 data class Number(val point: Point, val value: String) {
     val length: Int = value.length
 }
@@ -66,17 +65,8 @@ data class ParsingContext(
                     .reduce { a, b -> a * b }
             }
 
-    private fun hasASymbolInNeighbourhood(number: Number): Boolean {
-        val symbolPoints = symbols.map { it.point }
-        val point = number.point
-
-        return (point.x - 1..(point.x + number.length))
-            .any { x ->
-                (point.y - 1..(point.y + 1)).any { y ->
-                    Point(x = x, y = y) in symbolPoints
-                }
-            }
-    }
+    private fun hasASymbolInNeighbourhood(number: Number): Boolean =
+        getSymbolsInTheNeighbourhood(number).isNotEmpty()
 
     private fun getSymbolsInTheNeighbourhood(number: Number): List<Pair<Symbol, Number>> =
         (number.point.x - 1..(number.point.x + number.length))
