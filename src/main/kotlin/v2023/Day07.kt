@@ -12,21 +12,39 @@ import gg.jte.aoc.v2023.HandType.TwoPair
 
 fun main() {
     val input = getTextFromFile("v2023/day07.txt")
-    measureTimeAndPrint { input.parseAsHands().totalWinnings() }
+    measureTimeAndPrint { input.parseAsHands(useJokers = false).totalWinnings() }
+    measureTimeAndPrint { input.parseAsHands(useJokers = true).totalWinnings() }
 }
 
 data class Hand(
     val cards: String,
-    val bid: Int
+    val bid: Int,
+    val jokersUsed: Boolean = false,
 ) : Comparable<Hand> {
+
     val type: HandType
         get() {
-            val occurences = cards.groupingBy { it }.eachCount()
-            return when (occurences.values.max()) {
+            val jokersCount = if (jokersUsed) cards.count { it == 'J' } else 0
+            val shouldConsiderJokers = jokersUsed && jokersCount > 0
+
+            val occurences = cards
+                .filter { !shouldConsiderJokers || it != 'J' }
+                .groupingBy { it }
+                .eachCount()
+
+            val maxOccurences = occurences.values.maxOrNull() ?: 0
+            val numberOfPairs = occurences.count { it.value == 2 }
+
+            return when (maxOccurences + jokersCount) {
                 5 -> FiveOfAKind
                 4 -> FourOfAKind
-                3 -> if (occurences.any { it.value == 2 }) FullHouse else ThreeOfAKind
-                2 -> when (occurences.count { it.value == 2 }) {
+                3 -> when (numberOfPairs) {
+                    2 -> if (shouldConsiderJokers) FullHouse else error("Wtf bro ?")
+                    1 -> if (shouldConsiderJokers) ThreeOfAKind else FullHouse
+                    else -> ThreeOfAKind
+                }
+
+                2 -> when (numberOfPairs) {
                     2 -> TwoPair
                     else -> OnePair
                 }
@@ -36,18 +54,20 @@ data class Hand(
             }
         }
 
-    private val asSortKey = this.cards.map { it.asDeckCard().sortKey }.joinToString(separator = "")
+    private val asSortKey = this.cards
+        .map { if (jokersUsed) it.asDeckCard().sortKeyForJokers else it.asDeckCard().sortKey }
+        .joinToString(separator = "")
 
-    override fun compareTo(other: Hand): Int {
-        return if (type == other.type) this.asSortKey.compareTo(other.asSortKey)
+    override fun compareTo(other: Hand): Int =
+        if (type == other.type) this.asSortKey.compareTo(other.asSortKey)
         else type.ordinal.compareTo(other.type.ordinal)
-    }
+
 }
 
-fun String.parseAsHands(): List<Hand> =
+fun String.parseAsHands(useJokers: Boolean): List<Hand> =
     lines().map { line ->
         val (cards, bid) = line.split(" ")
-        Hand(cards, bid.toInt())
+        Hand(cards, bid.toInt(), useJokers)
     }
 
 fun List<Hand>.totalWinnings() =
@@ -64,7 +84,11 @@ enum class HandType {
     FiveOfAKind,
 }
 
-enum class DeckCard(val asString: String, val sortKey: String = asString) {
+enum class DeckCard(
+    val asString: String,
+    val sortKey: String = asString,
+    val sortKeyForJokers: String = sortKey
+) {
     TWO("2"),
     THREE("3"),
     FOUR("4"),
@@ -74,7 +98,7 @@ enum class DeckCard(val asString: String, val sortKey: String = asString) {
     EIGHT("8"),
     NINE("9"),
     T("T", "A"),
-    J("J", "B"),
+    J("J", "B", "1"),
     Q("Q", "C"),
     K("K", "D"),
     A("A", "E"),
