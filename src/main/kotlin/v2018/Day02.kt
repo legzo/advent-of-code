@@ -56,26 +56,20 @@ data class Counters(val exactlyTwo: Int, val exactlyThree: Int) {
 
 //<editor-fold desc="Part 2">
 fun List<String>.findCommonLetters(): String? {
-    return mapNotNull { boxId ->
-        findMatchingBox(boxId)?.commonCharsWith(boxId)
-    }.firstOrNull()
+    return firstNotNullOfOrNull { findMatchingBox(it)?.commonCharsWith(it) }
 }
 
 private fun List<String>.findMatchingBox(boxId: String) =
-    firstOrNull {
-        boxId differByOnlyOneCharFrom it
-    }
+    firstOrNull { boxId differByOnlyOneCharFrom it }
 
 
 infix fun String.differByOnlyOneCharFrom(other: String) =
-    zip(other).count { (first, second) ->
-        first != second
-    } == 1
+    zip(other)
+        .count { (first, second) -> first != second } == 1
 
 fun String.commonCharsWith(other: String) =
-    zip(other).filter { (first, second) ->
-        first == second
-    }
+    zip(other)
+        .filter { (first, second) -> first == second }
         .joinToString(separator = "") { it.first.toString() }
 
 //</editor-fold>

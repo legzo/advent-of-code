@@ -64,9 +64,7 @@ fun List<String>.getIntactClaimId(): String? {
     val overlapingPositions = getOverlapingPositions()
     return map { Claim(it) }
         .firstOrNull {
-            it.positions.all { position ->
-                position !in overlapingPositions
-            }
+            it.positions.all { position -> position !in overlapingPositions }
         }?.id
 }
 
