@@ -44,3 +44,18 @@ inline fun <T> Iterable<T>.takeUntil(predicate: (T) -> Boolean): List<T> {
     }
     return list
 }
+
+fun findLCM(a: Long, b: Long): Long {
+    if (a == 0L) return 0L
+    if (b == 0L) return 0L
+    val larger = if (a > b) a else b
+    val maxLcm = a * b
+    var lcm = larger
+    while (lcm <= maxLcm) {
+        if (lcm % a == 0L && lcm % b == 0L) {
+            return lcm
+        }
+        lcm += larger
+    }
+    return maxLcm
+}

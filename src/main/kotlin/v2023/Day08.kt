@@ -1,5 +1,6 @@
 package gg.jte.aoc.v2023
 
+import gg.jte.aoc.findLCM
 import gg.jte.aoc.getTextFromFile
 import gg.jte.aoc.measureTimeAndPrint
 import gg.jte.aoc.parseWithRegex
@@ -8,7 +9,8 @@ import gg.jte.aoc.v2023.Instruction.RIGHT
 
 fun main() {
     val input = getTextFromFile("v2023/day08.txt")
-    measureTimeAndPrint { input.parseAsDocument().followInstructions().toList().size }
+    measureTimeAndPrint { input.parseAsDocument().countIterationsForHumans() }
+    measureTimeAndPrint { input.parseAsDocument().countIterationsForGhosts() }
 }
 
 data class Document(
@@ -16,15 +18,20 @@ data class Document(
     val nodes: Map<String, Node>,
 ) {
 
+    val startingNodes =
+        nodes
+            .filter { it.key.endsWith("A") }
+            .values
+
     private val instructionSequence: Sequence<Pair<Long, Instruction>> =
         generateSequence((1L to instructions.first())) { (index, _) ->
             val length = instructions.size
             (index + 1) to instructions[(index % length).toInt()]
         }
 
-    fun followInstructions(): Sequence<Node> =
+    private fun followInstructions(startingNode: Node?, whileCondition: (Node) -> Boolean): Sequence<Node> =
         instructionSequence
-            .scan(nodes["AAA"]) { node, (_, instruction) ->
+            .scan(startingNode) { node, (_, instruction) ->
                 if (node == null) error("Node can't be null though, can it ?!")
 
                 when (instruction) {
@@ -33,7 +40,24 @@ data class Document(
                 }
             }
             .filterNotNull()
-            .takeWhile { it.id != "ZZZ" }
+            .takeWhile(whileCondition)
+
+    fun countIterationsForHumans(): Long =
+        followInstructions(startingNode = nodes["AAA"], whileCondition = { node -> node.id != "ZZZ" })
+            .toList()
+            .size
+            .toLong()
+
+    fun countIterationsForGhosts(): Long =
+        startingNodes
+            .map {
+                followInstructions(
+                    startingNode = it,
+                    whileCondition = { node -> !node.id.endsWith("Z") }
+                ).toList().size.toLong()
+            }
+            .reduce { a, b -> findLCM(a, b) }
+
 }
 
 enum class Instruction { LEFT, RIGHT }
@@ -50,7 +74,7 @@ fun List<String>.parseAsDocument() =
     Document(
         instructions = first().map { it.asInstruction() },
         nodes = drop(1).mapNotNull {
-            it.parseWithRegex("""([A-Z]{3}) = \(([A-Z]{3}), ([A-Z]{3})\)""") { (id, left, right) ->
+            it.parseWithRegex("""(\w{3}) = \((\w{3}), (\w{3})\)""") { (id, left, right) ->
                 Node(id, left, right)
             }
         }.associateBy { it.id },
