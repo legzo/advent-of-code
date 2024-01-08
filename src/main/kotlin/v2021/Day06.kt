@@ -37,7 +37,7 @@ fun simulate(
             Lanternfish(5) to currentState.countFishAtCounter(6),
             Lanternfish(6) to currentState.countFishAtCounter(7) + currentState.countFishAtCounter(0),
             Lanternfish(7) to currentState.countFishAtCounter(8),
-            Lanternfish(8) to + currentState.countFishAtCounter(0),
+            Lanternfish(8) to currentState.countFishAtCounter(0),
         )
     }
 
