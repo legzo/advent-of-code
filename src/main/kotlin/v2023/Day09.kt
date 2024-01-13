@@ -5,17 +5,25 @@ import gg.jte.aoc.measureTimeAndPrint
 
 fun main() {
     val input = getTextFromFile("v2023/day09.txt")
-    measureTimeAndPrint { input.sumOfExtrapolatedValues() }
+    measureTimeAndPrint { input.sumByExtrapolating(String::getNextValue) }
+    measureTimeAndPrint { input.sumByExtrapolating(String::getPreviousValue) }
 }
 
-fun String.sumOfExtrapolatedValues() =
+fun String.sumByExtrapolating(extrapolateBy: (String) -> Int) =
     lines()
-        .sumOf { it.getNextValue() }
+        .sumOf(extrapolateBy)
 
 fun String.getNextValue() =
     sequenceOfDiffs()
         .map { it.last() }
         .sum()
+
+fun String.getPreviousValue() =
+    sequenceOfDiffs()
+        .map { it.first() }
+        .toList()
+        .reversed()
+        .reduce { a, b -> b - a }
 
 fun String.sequenceOfDiffs() =
     generateSequence(seed = asIntList()) { current ->

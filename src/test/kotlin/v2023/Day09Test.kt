@@ -34,8 +34,16 @@ internal class Day09Test {
     }
 
     @Test
+    fun `should get previous value`() {
+        "0 3 6 9 12 15".getPreviousValue() shouldBe -3
+        "1 3 6 10 15 21".getPreviousValue() shouldBe 0
+        "10 13 16 21 30 45".getPreviousValue() shouldBe 5
+    }
+
+    @Test
     fun `should get sum of extrapolated values`() {
-        input.sumOfExtrapolatedValues() shouldBe 114
+        input.sumByExtrapolating(String::getNextValue) shouldBe 114
+        input.sumByExtrapolating(String::getPreviousValue) shouldBe 2
     }
 
 }
