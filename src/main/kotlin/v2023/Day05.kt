@@ -10,7 +10,8 @@ fun main() {
     measureTimeAndPrint { input.parseAsAlmanac(::parseIndividualSeeds).getFinalSeedsLocations().min() }
     measureTimeAndPrint { processRanges(input)
         .sortedBy { it.first }
-        .minOf { it.first } }
+        .minOf { it.first }
+    }
 }
 
 data class Almanac(
@@ -42,11 +43,11 @@ data class AlmanacRange(
     val last = sourceRangeStart + length
     val offset = destinationRangeStart - sourceRangeStart
 
-    fun contains(value: Long): Boolean =
+    operator fun contains(value: Long): Boolean =
         value in (sourceRangeStart..sourceRangeStart + length)
 
     fun getCorrespondingOutput(input: Long): Long =
-        input + (destinationRangeStart - sourceRangeStart)
+        input + offset
 
     override fun toString(): String = "[$first->$last] $offset"
 
