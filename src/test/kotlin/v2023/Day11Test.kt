@@ -18,39 +18,19 @@ internal class Day11Test {
     #...#.....
     """.trimIndent()
 
-    private val expandedInput = """
-        ....#........
-        .........#...
-        #............
-        .............
-        .............
-        ........#....
-        .#...........
-        ............#
-        .............
-        .............
-        .........#...
-        #....#.......
-        """.trimIndent()
-
-    @Test
-    fun `should expand universe`() {
-        Universe(initialStateAsString = input).expandedStateAsString shouldBe expandedInput
-    }
-
     @Test
     fun `should locate stars`() {
-        Universe(initialStateAsString = input).locateStars() shouldBe
+        Universe(initialStateAsString = input, expansionFactor = 2).locateStars() shouldBe
                 listOf(
-                    Star(x = 4, y = 0),
-                    Star(x = 9, y = 1),
+                    Star(x = 3, y = 0),
+                    Star(x = 7, y = 1),
                     Star(x = 0, y = 2),
-                    Star(x = 8, y = 5),
-                    Star(x = 1, y = 6),
-                    Star(x = 12, y = 7),
-                    Star(x = 9, y = 10),
-                    Star(x = 0, y = 11),
-                    Star(x = 5, y = 11)
+                    Star(x = 6, y = 4),
+                    Star(x = 1, y = 5),
+                    Star(x = 9, y = 6),
+                    Star(x = 7, y = 8),
+                    Star(x = 0, y = 9),
+                    Star(x = 4, y = 9),
                 )
     }
 
@@ -81,24 +61,20 @@ internal class Day11Test {
 
     @Test
     fun `should calculate distance between stars`() {
-        Star(x = 1, y = 6) distanceTo Star(x = 5, y = 11) shouldBe 9
-        Star(x = 4, y = 0) distanceTo Star(x = 9, y = 10) shouldBe 15
-        Star(x = 0, y = 2) distanceTo  Star(x = 12, y = 7) shouldBe 17
-        Star(x = 0, y = 11) distanceTo Star(x = 5, y = 11) shouldBe 5
+        with(Universe(initialStateAsString = input, expansionFactor = 2)) {
+            Star(x = 1, y = 5) distanceTo Star(x = 4, y = 9) shouldBe 9
+            Star(x = 3, y = 0) distanceTo Star(x = 7, y = 8) shouldBe 15
+            Star(x = 0, y = 2) distanceTo Star(x = 9, y = 6) shouldBe 17
+            Star(x = 0, y = 9) distanceTo Star(x = 4, y = 9) shouldBe 5
+        }
     }
 
     @Test
     fun `should calculate sum of distances between stars`() {
-        listOf(
-            Star(x = 4, y = 0),
-            Star(x = 9, y = 1),
-            Star(x = 0, y = 2),
-            Star(x = 8, y = 5),
-            Star(x = 1, y = 6),
-            Star(x = 12, y = 7),
-            Star(x = 9, y = 10),
-            Star(x = 0, y = 11),
-            Star(x = 5, y = 11)
-        ).sumOfDistances() shouldBe 374
+        with(Universe(initialStateAsString = input, expansionFactor = 2)) {
+            locateStars().sumOfDistances() shouldBe 374
+        }
+
+
     }
 }

@@ -2,12 +2,13 @@ package gg.jte.aoc.v2023
 
 import gg.jte.aoc.getTextFromFile
 import gg.jte.aoc.measureTimeAndPrint
-import kotlin.math.abs
 
 fun main() {
     val input = getTextFromFile("v2023/day11.txt")
     measureTimeAndPrint {
-        Universe(initialStateAsString = input).locateStars().sumOfDistances()
+        with(Universe(initialStateAsString = input, expansionFactor = 2)) {
+            locateStars().sumOfDistances()
+        }
     }
 }
 
@@ -18,55 +19,50 @@ data class Star(
 
 data class Universe(
     val initialStateAsString: String,
+    val expansionFactor: Int,
 ) {
     private val initialWidth = initialStateAsString.lines().first().length
     private val initialColumns = getColumns(initialStateAsString)
-    val expandedStateAsString: String = expand(initialStateAsString)
-    private val finalWidth = expandedStateAsString.lines().first().length
+    private val initialRows = initialStateAsString.lines()
+
+    private val columnsThatShouldBeExpanded = initialColumns.filterShouldBeExtended()
+    private val rowsThatShouldBeExpanded = initialRows.filterShouldBeExtended()
 
     fun locateStars(): List<Star> =
-        expandedStateAsString
+        initialStateAsString
             .asOneLine()
             .mapIndexedNotNull { index, character ->
                 if (character == '#')
-                    Star(index % finalWidth, index / finalWidth)
+                    Star(index % initialWidth, index / initialWidth)
                 else
                     null
             }
 
-    private fun expand(initialState: String): String {
+    infix fun Star.distanceTo(other: Star): Long =
+        getIndices(x, other.x, columnsThatShouldBeExpanded) + getIndices(y, other.y, rowsThatShouldBeExpanded)
 
-        return initialState
-            .lines()
-            .flatMap { line ->
-                val lineWithExpandedColumns = line.expandColumns(initialColumns)
-                lineWithExpandedColumns.duplicateIf { lineWithExpandedColumns.shouldBeDuplicated() }
-            }
-            .joinToString(separator = "\n")
-    }
+    fun Collection<Star>.sumOfDistances() =
+        allPairs()
+            .sumOf { it.first distanceTo it.second }
 
-    private fun String.expandColumns(columns: List<String>): String =
-        flatMapIndexed { index, character ->
-            character.toString().duplicateIf { columns[index].shouldBeDuplicated() }
-        }
-            .joinToString(separator = "")
+    private fun List<String>.filterShouldBeExtended() =
+        mapIndexedNotNull { index, string -> if (string.shouldBeExpanded()) index else null }
 
-    private fun getColumns(initialState: String): List<String> {
-
-        val oneLine = initialState.asOneLine()
-
-        return (0..<initialWidth).map { oneLine.getColumn(initialWidth, forIndex = it) }
-    }
+    private fun getColumns(initialState: String): List<String> =
+        (0..<initialWidth)
+            .map { initialState.asOneLine().getColumn(initialWidth, forIndex = it) }
 
     private fun String.asOneLine(): String = replace("\n", "")
 
-    private fun String.duplicateIf(condition: () -> Boolean) =
-        if (condition()) listOf(this, this) else listOf(this)
-
-    private fun String.shouldBeDuplicated() = !contains("#")
+    private fun String.shouldBeExpanded() = !contains("#")
 
     private fun String.getColumn(width: Int, forIndex: Int) = filterIndexed { index, _ -> index % width == forIndex }
 
+    private fun getIndices(firstCoord: Int, secondCoord: Int, coordsThatShouldBeExpanded: List<Int>): Long {
+        val xs = listOf(firstCoord, secondCoord).sorted()
+        return (xs[0] + 1..xs[1])
+            .sumOf { if (it in coordsThatShouldBeExpanded) expansionFactor.toLong() else 1L }
+    }
 }
 
 fun <T> Collection<T>.allPairs(acc: Set<Pair<T, T>> = setOf()): Set<Pair<T, T>> {
@@ -75,17 +71,7 @@ fun <T> Collection<T>.allPairs(acc: Set<Pair<T, T>> = setOf()): Set<Pair<T, T>> 
 
     val asList = toList()
     val first = asList.first()
-
-    val pairs = asList.minus(first).map {
-        first to it
-    }.toSet()
+    val pairs = asList.minus(first).map { first to it }.toSet()
 
     return asList.minus(first).allPairs(pairs + acc)
 }
-
-infix fun Star.distanceTo(other: Star): Int =
-    abs(this.x - other.x) + abs(this.y - other.y)
-
-fun Collection<Star>.sumOfDistances() =
-    allPairs()
-        .sumOf { it.first distanceTo it.second }
