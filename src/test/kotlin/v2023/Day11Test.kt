@@ -74,7 +74,5 @@ internal class Day11Test {
         with(Universe(initialStateAsString = input, expansionFactor = 2)) {
             locateStars().sumOfDistances() shouldBe 374
         }
-
-
     }
 }

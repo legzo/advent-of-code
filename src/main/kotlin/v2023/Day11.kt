@@ -10,6 +10,12 @@ fun main() {
             locateStars().sumOfDistances()
         }
     }
+
+    measureTimeAndPrint {
+        with(Universe(initialStateAsString = input, expansionFactor = 1000000)) {
+            locateStars().sumOfDistances()
+        }
+    }
 }
 
 data class Star(
@@ -25,8 +31,8 @@ data class Universe(
     private val initialColumns = getColumns(initialStateAsString)
     private val initialRows = initialStateAsString.lines()
 
-    private val columnsThatShouldBeExpanded = initialColumns.filterShouldBeExtended()
-    private val rowsThatShouldBeExpanded = initialRows.filterShouldBeExtended()
+    private val columnsThatShouldBeExpanded = initialColumns.filterShouldBeExpanded()
+    private val rowsThatShouldBeExpanded = initialRows.filterShouldBeExpanded()
 
     fun locateStars(): List<Star> =
         initialStateAsString
@@ -45,7 +51,7 @@ data class Universe(
         allPairs()
             .sumOf { it.first distanceTo it.second }
 
-    private fun List<String>.filterShouldBeExtended() =
+    private fun List<String>.filterShouldBeExpanded(): List<Int> =
         mapIndexedNotNull { index, string -> if (string.shouldBeExpanded()) index else null }
 
     private fun getColumns(initialState: String): List<String> =
