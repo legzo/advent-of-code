@@ -6,20 +6,6 @@ import org.junit.jupiter.api.Test
 internal class Day12Test {
 
     @Test
-    fun `should enumerate arrangements`() {
-        Row("?###???????? 1,2").allArrangements.size shouldBe 512
-        Row("????.#...#... 1,2").allArrangements.size shouldBe 16
-    }
-
-    @Test
-    fun `should group spring`() {
-        ".............".getGroups() shouldBe listOf()
-        ".##..##..#...".getGroups() shouldBe listOf(2, 2, 1)
-        "###..##..#...".getGroups() shouldBe listOf(3, 2, 1)
-        "###..#...#..#".getGroups() shouldBe listOf(3, 1, 1, 1)
-    }
-
-    @Test
     fun `should get spring conditions`() {
         Row(".#.###.#.###### 1,3,1,6").conditions shouldBe listOf(1, 3, 1, 6)
     }
@@ -47,4 +33,5 @@ internal class Day12Test {
 
         input.totalNbOfValidArrangements() shouldBe 21
     }
+
 }

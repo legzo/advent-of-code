@@ -11,37 +11,40 @@ fun main() {
 }
 
 data class Row(val input: String) {
-    val conditions = input.split(" ")[1].split(",").map { it.toInt() }
-    val allArrangements = input.allArrangements()
+    private val splittedInput = input.split(" ")
 
-    private fun String.allArrangements(): List<String> =
-        if (!contains("?")) listOf(this)
-        else
-            (replaceFirst("?", "#")).allArrangements() +
-                    (replaceFirst("?", ".")).allArrangements()
+    private val inputToCheck = splittedInput[0]
+    val conditions = splittedInput[1].split(",").map { it.toInt() }
 
-    val nbOfValidArrangements =
-        allArrangements.count { it.getGroups() == conditions }
+    private fun recurr(input: String, context: GroupingContext): List<GroupingContext> =
+        if (!context.isValidSoFar() || input.isEmpty())
+            listOf(context.closeGroup())
+        else when (input.first()) {
+            '#' -> recurr(input.drop(1), context.increaseGroupSize())
+            '.' -> recurr(input.drop(1), context.closeGroup())
+
+            '?' -> recurr(input.replaceFirst('?', '#'), context) +
+                    recurr(input.replaceFirst('?', '.'), context)
+
+            else -> error("")
+        }
+
+    val nbOfValidArrangements = recurr(inputToCheck, GroupingContext(validationGroups = conditions))
+        .count { it.matchGroups == it.validationGroups }
 }
 
 data class GroupingContext(
     val currentGroup: Int = 0,
-    val allGroups: List<Int> = listOf()
+    val validationGroups: List<Int>,
+    val matchGroups: List<Int> = listOf(),
 ) {
     fun increaseGroupSize() = copy(currentGroup = currentGroup + 1)
-    fun closeGroup() = if (currentGroup != 0) {
-        copy(allGroups = allGroups + listOf(currentGroup), currentGroup = 0)
+    fun closeGroup() = if (currentGroup > 0) {
+        copy(currentGroup = 0, matchGroups = matchGroups + listOf(currentGroup))
     } else this
-}
 
-fun String.getGroups(): List<Int> =
-    fold(GroupingContext()) { acc, char ->
-        when (char) {
-            '#' -> acc.increaseGroupSize()
-            else -> acc.closeGroup()
-        }
-    }.closeGroup()
-        .allGroups
+    fun isValidSoFar() = matchGroups.zip(validationGroups).all { (a, b) -> a == b }
+}
 
 fun String.totalNbOfValidArrangements(): Int =
     lines().sumOf { Row(it).nbOfValidArrangements }
