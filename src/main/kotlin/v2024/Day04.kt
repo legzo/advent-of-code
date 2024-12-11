@@ -5,9 +5,8 @@ import gg.jte.aoc.measureTimeAndPrint
 
 fun main() {
     val input = getTextFromFile("v2024/day04.txt")
-    measureTimeAndPrint {
-        parse(input).countXMASes()
-    }
+    measureTimeAndPrint { parse(input).countXMASes() }
+    measureTimeAndPrint { parse(input).countMASes() }
 }
 
 fun parse(input: String) =
@@ -44,11 +43,35 @@ data class Grid(
             }
         }
 
+    private fun getDiagonalLetters(point: Point): List<Point> =
+        listOfNotNull(
+            pointsByCoord[Coords(x = point.coords.x + 1, y = point.coords.y + 1)],
+            pointsByCoord[Coords(x = point.coords.x + 1, y = point.coords.y - 1)],
+            pointsByCoord[Coords(x = point.coords.x - 1, y = point.coords.y + 1)],
+            pointsByCoord[Coords(x = point.coords.x - 1, y = point.coords.y - 1)],
+        )
+
     fun countXMASes() =
         points
             .filter { it.letter == "X" }
             .flatMap { getSurroundingWords(it) }
             .count { it == "XMAS" }
+
+    fun countMASes() =
+        points
+            .filter { it.letter == "A" }
+            .map { getDiagonalLetters(it) }
+            .count { xLetters ->
+                val groupedBy = xLetters.groupBy { it.letter }
+                val ms = groupedBy["M"] ?: return@count false
+
+                groupedBy.keys == setOf("M", "S") // only M and S
+                        && ms.size == 2 // there has to be 2 Ms
+                        && (ms allHaveSame { it.coords.x } || ms allHaveSame { it.coords.y })// with the same x or same y
+            }
+
+    private infix fun List<Point>.allHaveSame(predicate: (Point) -> Any): Boolean =
+        map(predicate).distinct().size == 1
 }
 
 data class Coords(

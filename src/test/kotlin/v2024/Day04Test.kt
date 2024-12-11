@@ -19,7 +19,12 @@ class Day04Test {
     """.trimIndent()
 
     @Test
-    fun `should get all surrounding words`() {
+    fun `should get all xmases`() {
         parse(input).countXMASes() shouldBe 18
+    }
+
+    @Test
+    fun `should get all mases`() {
+        parse(input).countMASes() shouldBe 9
     }
 }
