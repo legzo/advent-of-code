@@ -6,22 +6,31 @@ import gg.jte.aoc.measureTimeAndPrint
 fun main() {
     val input = getTextFromFile("v2024/day05.txt")
 
+    val (updates, rules) = parseAsRulesAndUpdate(input)
+
     measureTimeAndPrint {
-        val rulesAndUpdates = parseAsRulesAndUpdate(input)
-        rulesAndUpdates.getValidUpdates().sumOfMiddlePageNumbers()
+        updates
+            .filter(isValid = true, accordingTo = rules)
+            .sumOfMiddlePageNumbers()
+    }
+
+    measureTimeAndPrint {
+        updates
+            .filter(isValid = false, accordingTo = rules)
+            .map { it.reorderAccordingTo(rules) }
+            .sumOfMiddlePageNumbers()
     }
 }
 
 data class RulesAndUpdate(
+    val updates: Collection<Update>,
     val rules: Collection<Rule>,
-    val updates: Collection<Update>
-) {
-    fun getValidUpdates() =
-        updates
-            .filter { update ->
-                rules.all { it isValidFor update }
-            }
-}
+)
+
+fun Collection<Update>.filter(isValid: Boolean, accordingTo: Collection<Rule>) =
+    with(partition { it.isNotValidFor(accordingTo) }) {
+        if (isValid) second else first
+    }
 
 fun List<Update>.sumOfMiddlePageNumbers() =
     sumOf { it.pages[it.pages.size / 2] }
@@ -30,11 +39,11 @@ data class Rule(
     val beforePage: Int,
     val afterPage: Int,
 ) {
-    infix fun isValidFor(update: Update) =
+    infix fun isNotValidFor(update: Update): Boolean =
         with(update.pages) {
-            beforePage !in this
-                    || afterPage !in this
-                    || indexOf(beforePage) < indexOf(afterPage)
+            beforePage in this
+                    && afterPage in this
+                    && indexOf(beforePage) > indexOf(afterPage)
         }
 
 }
@@ -42,7 +51,28 @@ data class Rule(
 data class Update(
     val pages: List<Int>
 ) {
-    constructor(vararg page: Int) : this(pages = page.toTypedArray().toList())
+    constructor(vararg pages: Int) : this(pages = pages.toTypedArray().toList())
+
+    fun isNotValidFor(rules: Collection<Rule>): Boolean =
+        firstBrokenRule(rules) != null
+
+    fun firstBrokenRule(rules: Collection<Rule>): Rule? =
+        rules.firstOrNull { it isNotValidFor this }
+
+    fun reorderAccordingTo(rules: Collection<Rule>): Update =
+        firstBrokenRule(rules)
+            ?.let { copy(pages.swapElementsAccordingTo(it)).reorderAccordingTo(rules) }
+            ?: this
+}
+
+fun List<Int>.swapElementsAccordingTo(rule: Rule): List<Int> {
+    val firstIndex = indexOf(rule.beforePage)
+    val secondIndex = indexOf(rule.afterPage)
+    return toMutableList().apply {
+        val temp = this[firstIndex]
+        this[firstIndex] = this[secondIndex]
+        this[secondIndex] = temp
+    }.toList()
 }
 
 fun parseAsRulesAndUpdate(input: String): RulesAndUpdate {
