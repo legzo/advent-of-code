@@ -57,7 +57,7 @@ class MapOfTrees(asString: String) {
 context(MapOfTrees)
 fun Tree.scenicScore(): Int {
     val treeHeight = treeHeightAt(x = x, y = y)
-    return Direction.values()
+    return Direction.entries
         .map { direction ->
             trees(direction, of = this)
                 .takeUntil { it >= treeHeight }
@@ -69,7 +69,7 @@ fun Tree.scenicScore(): Int {
 context(MapOfTrees)
 fun Tree.isVisible(): Boolean {
     val treeHeight = treeHeightAt(x = x, y = y)
-    return Direction.values().any { direction ->
+    return Direction.entries.any { direction ->
         trees(direction, of = this).all { it < treeHeight }
     }
 }

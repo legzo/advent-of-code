@@ -22,10 +22,8 @@ fun parse(input: String) =
 
 data class Grid(
     val points: List<Point>,
-    val dimension: Int = points.maxOf { it.coords.x },
+    val pointsByCoord: Map<Coords, Point> = points.associateBy { it.coords }
 ) {
-
-    val pointsByCoord = points.associateBy { it.coords }
 
     private fun getSurroundingWords(point: Point): List<String> =
         with((0..3)) {
