@@ -15,7 +15,15 @@ fun main() {
     val input = getTextFromFile("v2024/day06.txt")
 
     val guardMap = parseAsMap(input)
-    measureTimeAndPrint { getGuardPositions(guardMap).size }
+    measureTimeAndPrint { getGuardPositions(guardMap).distinctPositions().size }
+    measureTimeAndPrint {
+        val pastPositions = getGuardPositions(guardMap).distinctPositions().drop(1)
+        pastPositions.count {
+            val newMap = guardMap.setObstacleAt(it)
+            val last = getGuardPositions(newMap).last()
+            last?.stepsCounter == 6999
+        }
+    }
 
 }
 
@@ -42,19 +50,31 @@ data class GuardMap(
     val guard: Guard = with(items.first { it.type == GUARD }) {
         Guard(position = this.position, facing = this.char.toDirection())
     }
-)
+) {
+    fun setObstacleAt(position: Position): GuardMap {
+        val itemToRemove = items.first { it.position == position }
+        val newItems = buildList {
+            addAll(items)
+            remove(itemToRemove)
+            add(Item(position = position, type = OBSTACLE, char = '#'))
+        }
+        return GuardMap(items = newItems)
+    }
+}
 
-fun getGuardPositions(guardMap: GuardMap): List<Position> {
+fun getGuardPositions(guardMap: GuardMap): Sequence<Guard?> {
     val guard = guardMap.guard
 
     val guardSequence: Sequence<Guard?> = generateSequence(guard) { guard -> guard.move(guardMap) }
 
     return guardSequence
-        .takeWhile { it != null }
-        .toList()
-        .mapNotNull { it?.position }
-        .distinct()
+        .takeWhile { it != null && it.stepsCounter <= 6999 }
 }
+
+fun Sequence<Guard?>.distinctPositions() =
+    mapNotNull { it?.position }
+        .toList()
+        .distinct()
 
 data class Position(
     val x: Int,
@@ -72,6 +92,7 @@ enum class ItemType { EMPTY, OBSTACLE, GUARD }
 data class Guard(
     val position: Position,
     val facing: Direction,
+    val stepsCounter: Int = 0,
 ) {
 
     fun move(map: GuardMap): Guard? {
@@ -84,7 +105,7 @@ data class Guard(
 
         return when (map.itemsByPosition[nextPosition]?.type) {
             null -> null
-            EMPTY, GUARD -> this.copy(position = nextPosition)
+            EMPTY, GUARD -> this.copy(position = nextPosition, stepsCounter = stepsCounter + 1)
             OBSTACLE -> this.copy(facing = facing.pivotRight())
         }
     }
